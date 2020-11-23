@@ -1,14 +1,16 @@
 {
-  "auth": {
+  "user": {
+    "email": null,
     "token": null
   },
   "templates": [
     {
-      "name": "daily",
+      "name": "find_template",
       "jql": null
     },
     {
-      "name": "grooming",
+      "name": "find_and_create_template",
+      "jql": null,
       "forceCreate": {
         "_body": {
           "fields": {

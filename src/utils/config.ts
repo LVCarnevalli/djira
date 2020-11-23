@@ -12,10 +12,22 @@ export class DataTemplate {
   }
 }
 
+export class DataUser {
+  public email: string;
+  public token: string;
+
+  constructor(email: string, token: string) {
+    this.email = email;
+    this.token = token;
+  }
+}
+
 export class DataConfig {
+  public user: DataUser;
   public templates: DataTemplate[];
 
-  constructor(templates: DataTemplate[]) {
+  constructor(user: DataUser, templates: DataTemplate[]) {
+    this.user = user;
     this.templates = templates;
   }
 }

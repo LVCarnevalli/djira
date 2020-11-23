@@ -1,0 +1,31 @@
+{
+  "auth": {
+    "token": null
+  },
+  "templates": [
+    {
+      "name": "daily",
+      "jql": null
+    },
+    {
+      "name": "grooming",
+      "forceCreate": {
+        "_body": {
+          "fields": {
+            "project": {
+              "key": null
+            },
+            "parent": {
+              "key": null
+            },
+            "summary": null,
+            "description": null,
+            "issuetype": {
+              "id": null
+            }
+          }
+        }
+      }
+    }
+  ]
+}

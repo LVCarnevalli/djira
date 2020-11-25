@@ -2,13 +2,23 @@ import {readJson} from 'fs-extra';
 import {join} from 'path';
 import {Command} from '@oclif/command';
 
+export class DataHttp {
+  public body: any;
+
+  constructor(body: any) {
+    this.body = body;
+  }
+}
+
 export class DataTemplate {
   public name: string;
   public jql: string;
+  public forceCreate: DataHttp;
 
-  constructor(name: string, jql: string) {
+  constructor(name: string, jql: string, forceCreate: DataHttp) {
     this.name = name;
     this.jql = jql;
+    this.forceCreate = forceCreate;
   }
 }
 

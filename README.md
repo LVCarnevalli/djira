@@ -28,26 +28,32 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`djira hello [FILE]`](#djira-hello-file)
+* [`djira config TYPE`](#djira-config-type)
 * [`djira help [COMMAND]`](#djira-help-command)
+* [`djira log KEY TIME`](#djira-log-key-time)
+* [`djira template TYPE`](#djira-template-type)
 
-## `djira hello [FILE]`
+## `djira config TYPE`
 
 ```
 USAGE
-  $ djira hello [FILE]
+  $ djira config TYPE
+
+ARGUMENTS
+  TYPE  (auth) action for configuration
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -e, --email=email  (required) email for JIRA, examples: -e teste@domain.com.br
+  -h, --help         show CLI help
+
+  -t, --token=token  (required) token for JIRA, examples: -t HASH123
+                     reference: https://confluence.atlassian.com/cloud/api-tokens-938839638.html
 
 EXAMPLE
-  $ djira hello
-  hello world from ./src/hello.ts!
+  $ djira config auth --email teste@domain.com.br --token HASH123
 ```
 
-_See code: [src/commands/hello.ts](https://github.com/Downloads/djira/blob/v0.0.1/src/commands/hello.ts)_
+_See code: [src/commands/config.ts](https://github.com/LVCarnevalli/djira/blob/v0.0.1/src/commands/config.ts)_
 
 ## `djira help [COMMAND]`
 
@@ -63,4 +69,76 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.0/src/commands/help.ts)_
+
+## `djira log KEY TIME`
+
+```
+USAGE
+  $ djira log KEY TIME
+
+ARGUMENTS
+  KEY   key of task or template name, examples: TASK-123, daily
+  TIME  time of worked, examples: 30m, 1h
+
+OPTIONS
+  -d, --date=date      date to log the work, pattern: DD/MM/YYYY, examples: -d 25/02/2020
+  -h, --help           show CLI help
+  -p, --params=params  parameters for the template if the args KEY is a template name, examples: -p value1 value2
+
+EXAMPLE
+  $ djira log daily 30m
+  $ djira log daily 10m --params value1 value2
+  $ djira log TASK-123 1h
+  $ djira log TASK-123 2h --date 25/02/2020
+```
+
+_See code: [src/commands/log.ts](https://github.com/LVCarnevalli/djira/blob/v0.0.1/src/commands/log.ts)_
+
+## `djira template TYPE`
+
+```
+USAGE
+  $ djira template TYPE
+
+ARGUMENTS
+  TYPE  (add|remove|list) action for template
+
+OPTIONS
+  -f, --force-create=force-create  create task if not exists using the body of JIRA, examples: -f {json_body}
+                                   reference:
+                                   https://developer.atlassian.com/server/jira/platform/jira-rest-api-examples/
+
+  -h, --help                       show CLI help
+
+  -j, --jql=jql                    jql query of JIRA, examples: -j "project = TASK"
+                                   reference: https://www.atlassian.com/software/jira/guides/expand-jira/jql
+
+  -n, --name=name                  template name, examples: -n daily
+
+EXAMPLE
+  $ djira template add --name daily --jql "project = TASK AND issuetype = \"Alinhamento Diario\" AND sprint in 
+  openSprints()"
+  $ djira template add --name daily
+  --jql "project = TASK AND issuetype = \"Alinhamento Diario\" AND issue = {param1}"
+  --force-create '{
+       "fields": {
+           "project": {
+               "key": "TEST"
+           },
+           "parent": {
+               "key": "{param1}"
+           },
+           "summary": "Sub-task of TEST-101",
+           "description": "Don't forget to do this too.",
+           "issuetype": {
+               "id": "5"
+           }
+       }
+  }
+  $ djira template list
+  $ djira template list --name daily
+  $ djira template remove --name daily
+```
+
+_See code: [src/commands/template.ts](https://github.com/LVCarnevalli/djira/blob/v0.0.1/src/commands/template.ts)_
 <!-- commandsstop -->

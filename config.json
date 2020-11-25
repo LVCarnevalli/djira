@@ -12,7 +12,7 @@
       "name": "find_and_create_template",
       "jql": null,
       "forceCreate": {
-        "_body": {
+        "body": {
           "fields": {
             "project": {
               "key": null

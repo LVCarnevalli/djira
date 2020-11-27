@@ -1,4 +1,6 @@
 import {Command, flags} from '@oclif/command';
+import * as TemplateUtils from '../utils/template';
+import {DataTemplate} from '../utils/storage';
 
 export default class Template extends Command {
   static description = 'create, list and remove templates';
@@ -31,8 +33,10 @@ $ djira template remove --name daily
   static flags = {
     help: flags.help({char: 'h'}),
     name: flags.string({char: 'n', description: 'template name, examples: -n daily'}),
-    jql: flags.string({char: 'j', description: 'jql query of JIRA, examples: -j "project = TASK"' +
-        '\nreference: https://www.atlassian.com/software/jira/guides/expand-jira/jql'}),
+    jql: flags.string({
+      char: 'j', description: 'jql query of JIRA, examples: -j "project = TASK"' +
+        '\nreference: https://www.atlassian.com/software/jira/guides/expand-jira/jql'
+    }),
     "force-create": flags.string({
       char: 'f',
       description: 'create task if not exists using the body of JIRA, examples: -f {json_body}' +
@@ -47,9 +51,31 @@ $ djira template remove --name daily
   async run() {
     const {args, flags} = this.parse(Template);
 
-    this.log(`name = ${flags.name}`);
-    this.log(`jql = ${flags.jql}`);
-    this.log(`force-create = ${flags["force-create"]}`);
-    this.log(`type = ${args.type}`);
+    switch (args.type) {
+      case 'list':
+        await this.list();
+        break;
+      case 'add':
+        // @ts-ignore
+        await this.add(flags.name, flags.jql, flags["force-create"]);
+        break;
+      case 'remove':
+        // @ts-ignore
+        await this.remove(flags.name);
+        break;
+    }
+  }
+
+  async list() {
+    const templates: DataTemplate[] = await TemplateUtils.list(this);
+    this.log(JSON.stringify(templates));
+  }
+
+  async add(name: string, jql: string, forceCreate: string) {
+    await TemplateUtils.add(this, name, jql, forceCreate);
+  }
+
+  async remove(name: string) {
+    await TemplateUtils.remove(this, name);
   }
 }

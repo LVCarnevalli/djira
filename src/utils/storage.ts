@@ -1,4 +1,4 @@
-import {readJson} from 'fs-extra';
+import {readJson, writeJson} from 'fs-extra';
 import {join} from 'path';
 import {Command} from '@oclif/command';
 
@@ -53,3 +53,12 @@ export async function read(ctx: Command): Promise<DataConfig> {
   }
 }
 
+export async function write(ctx: Command, data: DataConfig) {
+  try {
+    await writeJson('config.json', data);
+  } catch (error) {
+    ctx.error(error || 'A djira CLI error has occurred from write config.json file.', {
+      exit: 1
+    });
+  }
+}

@@ -1,4 +1,5 @@
 import {Command, flags} from '@oclif/command';
+import * as AuthUtils from '../utils/auth';
 
 export default class Config extends Command {
   static description = 'configure CLI';
@@ -10,8 +11,10 @@ export default class Config extends Command {
   static flags = {
     help: flags.help({char: 'h'}),
     email: flags.string({char: 'e', required: true, description: 'email for JIRA, examples: -e teste@domain.com.br'}),
-    token: flags.string({char: 't', required: true, description: 'token for JIRA, examples: -t HASH123' +
-        '\nreference: https://confluence.atlassian.com/cloud/api-tokens-938839638.html'}),
+    token: flags.string({
+      char: 't', required: true, description: 'token for JIRA, examples: -t HASH123' +
+        '\nreference: https://confluence.atlassian.com/cloud/api-tokens-938839638.html'
+    }),
   };
 
   static args = [
@@ -21,8 +24,10 @@ export default class Config extends Command {
   async run() {
     const {args, flags} = this.parse(Config);
 
-    this.log(`email = ${flags.email}`);
-    this.log(`token = ${flags.token}`);
-    this.log(`type = ${args.type}`);
+    switch (args.type) {
+      case 'auth':
+        await AuthUtils.configure(this, flags.email, flags.token);
+        break;
+    }
   }
 }

@@ -1,4 +1,5 @@
 import {Command, flags} from '@oclif/command';
+import * as AuthUtils from '../utils/auth';
 
 export default class Log extends Command {
   static description = 'log working time';
@@ -14,7 +15,11 @@ $ djira log TASK-123 2h --date 25/02/2020
   static flags = {
     help: flags.help({char: 'h'}),
     date: flags.string({char: 'd', description: 'date to log the work, pattern: DD/MM/YYYY, examples: -d 25/02/2020'}),
-    params: flags.string({multiple: true, char: 'p', description: 'parameters for the template if the args KEY is a template name, examples: -p value1 value2'}),
+    params: flags.string({
+      multiple: true,
+      char: 'p',
+      description: 'parameters for the template if the args KEY is a template name, examples: -p value1 value2'
+    }),
   };
 
   static args = [
@@ -24,6 +29,8 @@ $ djira log TASK-123 2h --date 25/02/2020
 
   async run() {
     const {args, flags} = this.parse(Log);
+
+    await AuthUtils.validate(this);
 
     this.log(`date = ${flags.date}`);
     this.log(`params = ${flags.params}`);

@@ -7,23 +7,9 @@ export default class Template extends Command {
 
   static examples = [
     `$ djira template add --name daily --jql "project = TASK AND issuetype = \\"Alinhamento Diario\\" AND sprint in openSprints()"
-$ djira template add --name daily
---jql "project = TASK AND issuetype = \\"Alinhamento Diario\\" AND issue = {param1}"
---force-create '{
-    "fields": {
-        "project": {
-            "key": "TEST"
-        },
-        "parent": {
-            "key": "{param1}"
-        },
-        "summary": "Sub-task of TEST-101",
-        "description": "Don't forget to do this too.",
-        "issuetype": {
-            "id": "5"
-        }
-    }
-}
+$ djira template add --name daily ]
+--jql "project = TASK AND issuetype = \\"Alinhamento Diario\\" AND issue = {param1}" \
+--force-create "{\\"fields\\":{\\"project\\":{\\"key\\":\\"TEST\\"},\\"parent\\":{\\"key\\":\\"{param1}\\"},\\"summary\\":\\"Sub-task of TEST-101\\",\\"issuetype\\":{\\"id\\":\\"5\\"}}}"
 $ djira template list
 $ djira template list --name daily
 $ djira template remove --name daily
@@ -40,7 +26,9 @@ $ djira template remove --name daily
     "force-create": flags.string({
       char: 'f',
       description: 'create task if not exists using the body of JIRA, examples: -f {json_body}' +
-        '\nreference: https://developer.atlassian.com/server/jira/platform/jira-rest-api-examples/'
+        '\nreference: https://developer.atlassian.com/server/jira/platform/jira-rest-api-examples/' +
+        '\nreference issues types: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-types/'
+
     }),
   };
 

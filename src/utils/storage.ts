@@ -1,51 +1,45 @@
-import {readJson, writeJson} from 'fs-extra';
+import {readJsonSync, writeJsonSync, pathExistsSync} from 'fs-extra';
 import {join} from 'path';
 import {Command} from '@oclif/command';
+import * as os from 'os';
 
-export class DataHttp {
-  public body: any;
-
-  constructor(body: any) {
-    this.body = body;
-  }
-}
+const STORAGE_FILE_NAME = '/djira.conf'
 
 export class DataTemplate {
   public name: string;
   public jql: string;
-  public forceCreate: DataHttp;
+  public forceCreate: string;
 
-  constructor(name: string, jql: string, forceCreate: DataHttp) {
+  constructor(name: string, jql: string, forceCreate: string) {
     this.name = name;
     this.jql = jql;
     this.forceCreate = forceCreate;
   }
 }
 
-export class DataUser {
+export class DataConfig {
+  public url: string;
   public email: string;
   public token: string;
-
-  constructor(email: string, token: string) {
-    this.email = email;
-    this.token = token;
-  }
-}
-
-export class DataConfig {
-  public user: DataUser;
   public templates: DataTemplate[];
 
-  constructor(user: DataUser, templates: DataTemplate[]) {
-    this.user = user;
+  constructor(url: string, email: string, token: string, templates: DataTemplate[]) {
+    this.url = url;
+    this.email = email;
+    this.token = token;
     this.templates = templates;
   }
 }
 
 export async function read(ctx: Command): Promise<DataConfig> {
-  const config = join(process.cwd(), 'config.json');
+  const file = join(os.homedir(), STORAGE_FILE_NAME);
+
+  if (!pathExistsSync(file)) {
+    writeJsonSync(file, {});
+  }
+
   try {
-    return await readJson(config);
+    return readJsonSync(file);
   } catch (error) {
     ctx.error(error || 'A djira CLI error has occurred from read config.json file.', {
       exit: 1
@@ -54,8 +48,10 @@ export async function read(ctx: Command): Promise<DataConfig> {
 }
 
 export async function write(ctx: Command, data: DataConfig) {
+  const file = join(os.homedir(), STORAGE_FILE_NAME);
+
   try {
-    await writeJson('config.json', data);
+    writeJsonSync(file, data);
   } catch (error) {
     ctx.error(error || 'A djira CLI error has occurred from write config.json file.', {
       exit: 1

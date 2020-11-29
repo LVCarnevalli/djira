@@ -1,11 +1,11 @@
 import {Command, flags} from '@oclif/command';
-import * as AuthUtils from '../utils/auth';
+import * as ConfigUtils from '../utils/config';
 
 export default class Config extends Command {
   static description = 'configure CLI';
 
   static examples = [
-    `$ djira config auth --email teste@domain.com.br --token HASH123`,
+    `$ djira config --email teste@domain.com.br --token HASH123 --url https://www.atlassian.com`,
   ];
 
   static flags = {
@@ -15,19 +15,14 @@ export default class Config extends Command {
       char: 't', required: true, description: 'token for JIRA, examples: -t HASH123' +
         '\nreference: https://confluence.atlassian.com/cloud/api-tokens-938839638.html'
     }),
+    url: flags.string({char: 'u', required: true, description: 'url for JIRA, examples: -u https://www.atlassian.com'}),
   };
 
-  static args = [
-    {name: 'type', options: ['auth'], required: true, description: "action for configuration"},
-  ];
+  static args = [];
 
   async run() {
     const {args, flags} = this.parse(Config);
 
-    switch (args.type) {
-      case 'auth':
-        await AuthUtils.configure(this, flags.email, flags.token);
-        break;
-    }
+    await ConfigUtils.configure(this, flags.url, flags.email, flags.token);
   }
 }

@@ -7,7 +7,7 @@ export default class Template extends Command {
 
   static examples = [
     `$ djira template add --name daily --jql "project = TASK AND issuetype = \\"Alinhamento Diario\\" AND sprint in openSprints()"
-$ djira template add --name daily ]
+$ djira template add --name daily \
 --jql "project = TASK AND issuetype = \\"Alinhamento Diario\\" AND issue = {param1}" \
 --force-create "{\\"fields\\":{\\"project\\":{\\"key\\":\\"TEST\\"},\\"parent\\":{\\"key\\":\\"{param1}\\"},\\"summary\\":\\"Sub-task of TEST-101\\",\\"issuetype\\":{\\"id\\":\\"5\\"}}}"
 $ djira template list

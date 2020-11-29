@@ -119,10 +119,9 @@ OPTIONS
 EXAMPLE
   $ djira template add --name daily --jql "project = TASK AND issuetype = \"Alinhamento Diario\" AND sprint in 
   openSprints()"
-  $ djira template add --name daily ]
-  --jql "project = TASK AND issuetype = \"Alinhamento Diario\" AND issue = {param1}" --force-create 
-  "{\"fields\":{\"project\":{\"key\":\"TEST\"},\"parent\":{\"key\":\"{param1}\"},\"summary\":\"Sub-task of 
-  TEST-101\",\"issuetype\":{\"id\":\"5\"}}}"
+  $ djira template add --name daily --jql "project = TASK AND issuetype = \"Alinhamento Diario\" AND issue = {param1}" 
+  --force-create "{\"fields\":{\"project\":{\"key\":\"TEST\"},\"parent\":{\"key\":\"{param1}\"},\"summary\":\"Sub-task 
+  of TEST-101\",\"issuetype\":{\"id\":\"5\"}}}"
   $ djira template list
   $ djira template list --name daily
   $ djira template remove --name daily
